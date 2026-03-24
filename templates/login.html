@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="position-absolute top-0 start-0 p-4 ms-2 mt-2 d-flex align-items-center">
+    <div class="app-logo-icon me-3" style="width: 60px; height: 60px; font-size: 28px;">
+        <i class="fa-solid fa-lock"></i>
+    </div>
+    <div>
+        <h3 class="text-cyan mb-0 fw-bold">Secure Vault</h3>
+        <small class="text-muted-custom" style="font-size: 0.95rem;">Your passwords, protected</small>
+    </div>
+</div>
+
+<div class="auth-wrapper d-flex flex-column align-items-center w-100 mt-5 pt-4">
+    <div class="glass-card w-100 mb-4">
+        <h4 class="mb-1 fw-bold">Welcome Back</h4>
+        <p class="text-muted-custom mb-4" style="font-size: 0.9rem;">Enter your credentials to continue</p>
+
+        <form method="POST">
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control custom-input" placeholder="Enter your username" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Master Password</label>
+                <div class="input-group">
+                    <input type="password" name="password" id="masterPwd" class="form-control custom-input border-end-0" placeholder="Enter your master password" required>
+                    <span class="input-group-text custom-input-icon border-start-0" onclick="togglePassword('masterPwd', 'eyeIconLogin')">
+                        <i class="fa-regular fa-eye" id="eyeIconLogin"></i>
+                    </span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-gradient w-100 mb-3">Login</button>
+        </form>
+
+        <div class="auth-divider">
+            <span>Don't have an account?</span>
+        </div>
+
+        <a href="/register" class="btn btn-white w-100 d-block text-center">Create Account</a>
+    </div>
+
+    <div class="text-muted-custom" style="font-size: 0.8rem;">Your passwords are encrypted and secure</div>
+</div>
+
+<script>
+    function togglePassword(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
+</script>
+{% endblock %}

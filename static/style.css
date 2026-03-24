@@ -1,0 +1,240 @@
+/* ================= GLOBAL ================= */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    color: #e2e8f0;
+    /* This creates the rich, glowing background depth */
+    background: radial-gradient(circle at 15% 50%, rgba(34, 211, 238, 0.12), transparent 45%),
+                radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.12), transparent 45%),
+                linear-gradient(135deg, #0f172a 0%, #020617 100%);
+    background-color: #020617;
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+/* ================= TYPOGRAPHY ================= */
+.text-cyan { color: #22d3ee !important; }
+.text-purple { color: #c084fc !important; }
+.text-yellow { color: #fbbf24 !important; }
+.text-muted-custom { color: #94a3b8 !important; } /* Lightened for better readability */
+
+/* ================= CARDS & CONTAINERS ================= */
+.glass-card {
+    background: rgba(30, 41, 59, 0.6); /* Semi-transparent base */
+    backdrop-filter: blur(16px); /* The "Glass" effect */
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.auth-wrapper {
+    width: 100%;
+    max-width: 420px;
+}
+
+.dashboard-wrapper {
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* ================= LOGO ================= */
+.app-logo-icon {
+    background: linear-gradient(135deg, #22d3ee, #0ea5e9);
+    border-radius: 12px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    box-shadow: 0 4px 20px rgba(34, 211, 238, 0.4); /* Stronger glow */
+}
+
+/* ================= INPUTS ================= */
+.form-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #cbd5e1;
+    margin-bottom: 0.5rem;
+}
+
+.custom-input {
+    background-color: rgba(15, 23, 42, 0.6) !important; /* Slightly transparent */
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #f8fafc !important;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1) !important;
+    transition: all 0.2s ease;
+}
+
+.custom-input:focus {
+    border-color: #22d3ee !important;
+    background-color: rgba(15, 23, 42, 0.8) !important;
+}
+
+.custom-input::placeholder {
+    color: #64748b !important;
+}
+
+/* Specifically for the password reveal eye icon box */
+.input-group-text.custom-input-icon {
+    background-color: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: none;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.input-group-text.custom-input-icon:hover {
+    color: #22d3ee;
+}
+
+/* ================= BUTTONS ================= */
+.btn-gradient {
+    background: linear-gradient(90deg, #22d3ee, #3b82f6);
+    border: none;
+    color: white;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0.8rem;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(34, 211, 238, 0.25);
+}
+
+.btn-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(34, 211, 238, 0.4);
+    color: white;
+}
+
+.btn-white {
+    background: white;
+    color: #0f172a;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem;
+    transition: background 0.2s;
+}
+
+.btn-white:hover {
+    background: #f1f5f9;
+}
+
+.btn-logout {
+    background: white;
+    color: #ef4444;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0.5rem 1.2rem;
+    transition: transform 0.2s;
+}
+.btn-logout:hover {
+    transform: translateY(-2px);
+}
+
+/* ================= DIVIDER (Login/Register) ================= */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1.5rem 0;
+    color: #64748b; /* Lighter so it's readable */
+    font-size: 0.85rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Brighter line */
+}
+
+.auth-divider span {
+    padding: 0 15px;
+}
+
+/* ================= TABLE/LIST ================= */
+.vault-header {
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.vault-row {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.vault-row:last-child {
+    border-bottom: none;
+}
+
+.vault-row:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.action-icon {
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-icon:hover {
+    color: #22d3ee;
+    transform: scale(1.1);
+}
+
+.action-icon.delete:hover {
+    color: #ef4444;
+}
+
+/* ================= SEARCH BAR FIX ================= */
+.search-container {
+    background-color: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden; /* Keeps the rounded corners perfectly clean */
+}
+
+.search-container:focus-within {
+    border-color: #22d3ee;
+    background-color: rgba(15, 23, 42, 0.8);
+}
+
+.search-container .input-group-text i {
+    transition: color 0.2s ease;
+}
+
+.search-container:focus-within .input-group-text i {
+    color: #22d3ee; /* Icon turns cyan when typing */
+}
+
+/* Override bootstrap input focus defaults inside this container */
+.search-container input:focus {
+    box-shadow: none !important;
+    background-color: transparent !important;
+}
+
+/* Make search placeholder highly legible */
+.search-container input::placeholder {
+    color: #cbd5e1 !important; /* A bright, legible slate color */
+    opacity: 1; /* Prevents some browsers from fading the text */
+}

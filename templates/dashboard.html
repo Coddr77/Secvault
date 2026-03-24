@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="dashboard-wrapper w-100">
+
+    <div class="d-flex justify-content-between align-items-center w-100 mb-5 pt-3">
+        <div class="d-flex align-items-center">
+            <div>
+                <h2 class="text-cyan mb-0 fw-bold">
+                    <i class="fa-solid fa-lock text-cyan me-2" style="font-size: 1.5rem;"></i>
+                    {{ session.username|capitalize }}'s Vault
+                </h2>
+                
+            </div>
+        </div>
+        <a href="/logout" class="btn btn-logout shadow-sm">
+            <i class="fa-solid fa-arrow-right-from-bracket me-2 text-danger"></i> Logout
+        </a>
+    </div>
+
+    <div class="glass-card mb-4 p-4">
+        <h5 class="mb-3 fw-bold"><i class="fa-solid fa-plus text-cyan me-2"></i> Add New Entry</h5>
+        
+        <form method="POST" action="/add" class="row g-3">
+            <div class="col-md-3">
+                <input type="text" name="site" class="form-control custom-input" placeholder="Website (e.g., Google)" required>
+            </div>
+            <div class="col-md-4">
+                <input type="text" name="username" class="form-control custom-input" placeholder="Username / Email" required>
+            </div>
+            <div class="col-md-3">
+                <input type="password" name="password" class="form-control custom-input" placeholder="Password" required>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-gradient w-100 h-100">Add Entry</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="mb-4" style="max-width: 400px;">
+        <div class="input-group search-container">
+            <span class="input-group-text border-0 bg-transparent ps-3 pe-2 text-muted-custom">
+                <i class="fa-solid fa-search"></i>
+            </span>
+            <input type="text" id="searchInput" class="form-control border-0 bg-transparent text-white shadow-none ps-1 py-2" placeholder="Search your vault...">
+        </div>
+    </div>
+
+    <div class="glass-card p-0 overflow-hidden mb-4">
+        
+        <div class="vault-header row m-0 text-muted-custom align-items-center">
+            <div class="col-3"><i class="fa-solid fa-globe text-cyan me-2"></i> Site</div>
+            <div class="col-4"><i class="fa-regular fa-user text-purple me-2"></i> Username</div>
+            <div class="col-3"><i class="fa-solid fa-key text-yellow me-2"></i> Password</div>
+            <div class="col-2 text-end">Action</div>
+        </div>
+
+        <div id="vaultList">
+            {% for item in vault %}
+            <div class="vault-row row m-0 align-items-center vault-item">
+                <div class="col-3 fw-semibold text-white site-name">{{ item.site_name }}</div>
+                <div class="col-4 text-light">{{ item.site_username }}</div>
+                
+                <div class="col-3">
+                    <span class="password-display" data-password="{{ item.encrypted_password }}">
+                        ••••••••••••
+                    </span>
+                </div>
+                
+                <div class="col-2">
+                    <div class="d-flex justify-content-end align-items-center gap-3 fs-5">
+                        <i class="fa-regular fa-eye action-icon toggle-pwd" title="Show/Hide"></i>
+                        <i class="fa-regular fa-copy action-icon copy-pwd" title="Copy"></i>
+                        <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#deleteModal" data-vault-id="{{ item.vault_id }}">
+                            <i class="fa-solid fa-trash action-icon delete" title="Delete"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="p-5 text-center text-muted-custom">
+                Your vault is empty. Add a password above.
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="text-center text-muted-custom pb-5" style="font-size: 0.85rem;">
+        Protecting {{ vault|length }} password{% if vault|length != 1 %}s{% endif %}
+    </div>
+
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass-card" style="padding: 0; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1);">
+            <div class="modal-header border-bottom-0 pb-0 mt-3 mx-2">
+                <h5 class="modal-title text-white fw-bold">
+                    <i class="fa-solid fa-triangle-exclamation text-danger me-2"></i> Delete Entry
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-muted-custom mx-2">
+                Are you sure you want to delete this password? This action cannot be undone.
+            </div>
+            <div class="modal-footer border-top-0 pt-0 mb-3 mx-2">
+                <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
+                <a href="#" id="confirmDeleteBtn" class="btn btn-danger px-4">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. Show/Hide Password functionality
+    document.querySelectorAll('.toggle-pwd').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const row = this.closest('.vault-row');
+            const displaySpan = row.querySelector('.password-display');
+            const actualPassword = displaySpan.getAttribute('data-password');
+            
+            if (displaySpan.textContent.trim() === '••••••••••••') {
+                displaySpan.textContent = actualPassword;
+                this.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                displaySpan.textContent = '••••••••••••';
+                this.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        });
+    });
+
+    // 2. Copy to Clipboard functionality
+    document.querySelectorAll('.copy-pwd').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const row = this.closest('.vault-row');
+            const displaySpan = row.querySelector('.password-display');
+            const actualPassword = displaySpan.getAttribute('data-password');
+            
+            navigator.clipboard.writeText(actualPassword).then(() => {
+                // Visual feedback
+                this.classList.replace('fa-copy', 'fa-check');
+                this.style.color = '#22d3ee';
+                setTimeout(() => {
+                    this.classList.replace('fa-check', 'fa-copy');
+                    this.style.color = '';
+                }, 1500);
+            });
+        });
+    });
+
+    // 3. Simple Client-Side Search
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll('.vault-item');
+        
+        rows.forEach(row => {
+            let siteName = row.querySelector('.site-name').textContent.toLowerCase();
+            if (siteName.indexOf(filter) > -1) {
+                row.style.display = "flex";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+
+    // 4. Custom Delete Modal Logic
+    const deleteModal = document.getElementById('deleteModal');
+    if (deleteModal) {
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const vaultId = button.getAttribute('data-vault-id');
+            const confirmBtn = document.getElementById('confirmDeleteBtn');
+            confirmBtn.href = `/delete/${vaultId}`;
+        });
+    }
+</script>
+{% endblock %}
